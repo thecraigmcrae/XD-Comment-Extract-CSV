@@ -12,16 +12,23 @@ function comma4dash(commaStr) {
 
 
 var elements = document.querySelectorAll('#ccx-comments-list li');
+var pageUrl = window.location.href;
+
 Array.prototype.forEach.call(elements, function(el, i){
-  if (el.classList.contains("global-section-header")) {
-    sectionName = el.querySelectorAll(".title.truncated")[0].textContent;
-    csvArray.push(pageName + "," + sectionName + ", - , - ,-" + "\n");
-    return;
+  if(el.closest('section')){
+    sectionName = el.closest('section').querySelectorAll('h3 span')[0].textContent;
   }
+
   if (el.querySelectorAll(".user-name").length>0) {
     userName = el.querySelectorAll(".user-name")[0].childNodes[0].textContent;
     changed = 1;
   }
+
+  if (el.querySelectorAll(".timestamp").length>0) {
+    timeStamp = el.querySelectorAll(".timestamp")[0].textContent;
+    changed = 1;
+  }
+
   if (el.querySelectorAll(".comment-text").length>0) {
     comment = el.querySelectorAll(".comment-text span div")[0].textContent;
     comment = comment.replace(/(\r\n|\n|\r)/gm,""); //remove line breaks
@@ -32,7 +39,7 @@ Array.prototype.forEach.call(elements, function(el, i){
     changed = 1;
   } else (annotation = " ");
 
-  changed?(csvArray.push(pageName + "," + comma4dash(sectionName) + "," + comma4dash(userName) + ",\"" + comma4dash(comment) + "\"," + annotation + "\n"), changed=0):'';
+  changed?(csvArray.push(pageName + "," + pageUrl + "," + comma4dash(sectionName) + "," + comma4dash(timeStamp) + "," + comma4dash(userName) + ",\"" + comma4dash(comment) + "\"," + annotation + "\n"), changed=0):'';
 
 });
 
